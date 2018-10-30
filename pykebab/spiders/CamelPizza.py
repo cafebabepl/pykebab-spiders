@@ -28,7 +28,7 @@ class CamelPizzaSpider(scrapy.Spider):
                 w = False
                 for j in range(1, c):
                     t = ''.join(td[j].css('::text').extract())
-                    if t.endswith('zł'):
+                    if t.endswith(u'zł'):
                         warianty.append('')
                     else:
                         warianty.append(t)
@@ -46,7 +46,7 @@ class CamelPizzaSpider(scrapy.Spider):
                     cena = ''.join(td[j].css('::text').extract())
 
                     if 'kebap' in grupa.lower():
-                        for wariant in ['wołowina', 'kurczak']:
+                        for wariant in [u'wołowina', u'kurczak']:
                             pozycja = Pozycja(grupa = grupa, nazwa = nazwa_pozycji, wariant = wariant, cena = cena)
                             yield pozycja                    
                     else:                    
