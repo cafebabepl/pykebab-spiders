@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from pykebab.items import Pozycja
+from pykebab.items import MenuItem
 
 class CamelPizzaSpider(scrapy.Spider):
     name = 'camel-pizza'
@@ -37,19 +37,19 @@ class CamelPizzaSpider(scrapy.Spider):
                 if w:
                     continue
 
-                nazwa_pozycji = ''.join(td[0].css('::text').extract())
-                if not nazwa_pozycji.strip():
+                pozycja = ''.join(td[0].css('::text').extract())
+                if not pozycja.strip():
                     continue;
 
                 for j in range(1, c):
                     wariant = warianty[j - 1]
                     cena = ''.join(td[j].css('::text').extract())
 
-                    if 'kebap' in grupa.lower() and u'mięso' in nazwa_pozycji.lower():
+                    if 'kebap' in grupa.lower() and u'mięso' in pozycja.lower():
                         for wariant in [u'wołowina', u'kurczak']:
-                            pozycja = Pozycja(grupa = grupa, nazwa = nazwa_pozycji, wariant = wariant, cena = cena)
-                            yield pozycja                    
+                            item = MenuItem(grupa = grupa, pozycja = pozycja, wariant = wariant, cena = cena)
+                            yield item                    
                     else:                    
-                        pozycja = Pozycja(grupa = grupa, nazwa = nazwa_pozycji, wariant = wariant, cena = cena)
-                        yield pozycja
+                        item = MenuItem(grupa = grupa, pozycja = pozycja, wariant = wariant, cena = cena)
+                        yield item
             

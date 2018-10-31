@@ -7,9 +7,8 @@
 
 import scrapy
 
-class Pozycja(scrapy.Item):
+class MenuItem(scrapy.Item):
 	grupa = scrapy.Field()
-	nazwa = scrapy.Field()
-	opis = scrapy.Field()
+	pozycja = scrapy.Field()
 	wariant = scrapy.Field()
 	cena = scrapy.Field()
