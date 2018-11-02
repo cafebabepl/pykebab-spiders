@@ -12,7 +12,8 @@ class CamelPizzaSpider(scrapy.Spider):
         'http://camelpizza.pl/spaghetti',
         'http://camelpizza.pl/burgery',
         'http://camelpizza.pl/salatki',
-        'http://camelpizza.pl/dla-malucha'        
+        'http://camelpizza.pl/dla-malucha',
+		'http://camelpizza.pl/zapiekanki-z-pieca-bydgoszcz-osielsko/'		
     ]
 
     def parse(self, response):
@@ -52,4 +53,3 @@ class CamelPizzaSpider(scrapy.Spider):
                     else:                    
                         item = MenuItem(grupa = grupa, pozycja = pozycja, wariant = wariant, cena = cena)
                         yield item
-            
