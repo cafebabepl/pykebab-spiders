@@ -13,38 +13,49 @@ class CamelPizzaSpider(scrapy.Spider):
         'http://camelpizza.pl/burgery',
         'http://camelpizza.pl/salatki',
         'http://camelpizza.pl/dla-malucha',
-		'http://camelpizza.pl/zapiekanki-z-pieca-bydgoszcz-osielsko/'		
+        'http://camelpizza.pl/zapiekanki-z-pieca-bydgoszcz-osielsko/'
     ]
 
     def parse(self, response):
 
+        def get_text(td):
+            return ''.join(td.css('::text').extract())
+
         grupa = ''.join(response.css('div#subhead').css('::text').extract()).strip()
-    
+        podgrupa = ''
         warianty = []
+
         for tr in response.css('div.post-entry tr'):
+            pozycja = ''
+
             td = tr.css('td')
-            c = len(td)
+            liczba_komorek = len(td)
             
-            if c >= 2:
-                w = False
-                for j in range(1, c):
-                    t = ''.join(td[j].css('::text').extract())
-                    if t.endswith(u'zł'):
+            if liczba_komorek >= 2:
+                is_pozycja = True
+                # warianty
+                for j in range(1, liczba_komorek):
+                    tekst = get_text(td[j])
+                    if tekst.endswith(u'zł'):
                         warianty.append('')
                     else:
-                        warianty.append(t)
-                        w = True
+                        warianty.append(tekst)
+                        is_pozycja = False
 
-                if w:
+                if is_pozycja:
+                    pozycja = get_text(td[0])
+                elif not get_text(td[1]):
+                    podgrupa = get_text(td[0])
+
+                if not (is_pozycja and pozycja.strip()):
                     continue
 
-                pozycja = ''.join(td[0].css('::text').extract())
-                if not pozycja.strip():
-                    continue;
+                if podgrupa.strip():
+                    pozycja = podgrupa + ' - ' + pozycja
 
-                for j in range(1, c):
+                for j in range(1, liczba_komorek):
                     wariant = warianty[j - 1]
-                    cena = ''.join(td[j].css('::text').extract())
+                    cena = get_text(td[j])
 
                     if 'kebap' in grupa.lower() and u'mięso' in pozycja.lower():
                         for wariant in [u'wołowina', u'kurczak']:
