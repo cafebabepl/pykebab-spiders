@@ -19,8 +19,8 @@ class CamelPizzaSpider(scrapy.Spider):
                 continue
 
             for itemRow in groupListItem.css('div.m-item__row'):
-                nazwa = get_text(itemRow.css('h4.m-item__title'))
-                #print("-->", nazwa)
+                pozycja = get_text(itemRow.css('h4.m-item__title'))
+                #print("-->", pozycja)
                 opis = get_text(itemRow.css('div.m-item__description'))
                 addToCartButton = itemRow.css('.js-add-to-cart-button')
 
@@ -28,12 +28,12 @@ class CamelPizzaSpider(scrapy.Spider):
                     cena = get_text(addToCartButton[0])
                     if 'kebap' in grupa.lower() and u'mięso' in opis.lower():
                         for wariant in [u'wołowina', u'kurczak']:
-                            item = MenuItem(grupa = grupa, nazwa = nazwa, opis = opis, wariant = wariant, cena = cena)
+                            item = MenuItem(grupa = grupa, pozycja = pozycja, opis = opis, wariant = wariant, cena = cena)
                             #print(item)
                             yield item                    
                     else:
                         wariant = ''
-                        item = MenuItem(grupa = grupa, nazwa = nazwa, opis = opis, wariant = wariant, cena = cena)
+                        item = MenuItem(grupa = grupa, pozycja = pozycja, opis = opis, wariant = wariant, cena = cena)
                         #print(item)
                         yield item
                 elif len(addToCartButton) > 1:
@@ -41,6 +41,6 @@ class CamelPizzaSpider(scrapy.Spider):
                         pola = get_text(addToCartItem).split('-')
                         wariant = pola[0].strip()
                         cena = pola[-1].strip()
-                        item = MenuItem(grupa = grupa, nazwa = nazwa, opis = opis, wariant = wariant, cena = cena)
+                        item = MenuItem(grupa = grupa, pozycja = pozycja, opis = opis, wariant = wariant, cena = cena)
                         #print(item)
                         yield item
