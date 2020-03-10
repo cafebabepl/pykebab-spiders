@@ -20,6 +20,9 @@ class CamelPizzaSpider(scrapy.Spider):
 
             for itemRow in groupListItem.css('div.m-item__row'):
                 pozycja = get_text(itemRow.css('h4.m-item__title'))
+                if not pozycja[:1].isdigit():
+                    continue
+                    
                 #print("-->", pozycja)
                 opis = get_text(itemRow.css('div.m-item__description'))
                 addToCartButton = itemRow.css('.js-add-to-cart-button')
